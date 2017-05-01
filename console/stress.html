@@ -3,7 +3,8 @@
   <h2>Console Stress test</h2>
   <p>Click the buttons below to spam the console</p>
 
-  <button id="do-logs">LOL (Lots Of Logs)</button>
+  <button id="do-logs">LOL With Objects (Lots Of Logs)</button>
+  <button id="do-logs-no-obj">LOL Without Objects (Lots Of Logs)</button>
   <button id="stream-logs">Streaming logs (Press 'T' key)</button>
 
   <div id="streaming-info"></div>
@@ -14,7 +15,9 @@
   <script>
 
   var i = 0;
-  document.querySelector("#do-logs").onclick = function() {
+  var includeObj = false;
+
+  function doLogs() {
     var totalStartTime = performance.now();
     var results = [];
     for (i = 0; i < 10000; i++) {
@@ -38,6 +41,15 @@
       li.textContent = result.toFixed(4) + "milliseconds";
       logs.appendChild(li);
     });
+
+  }
+  document.querySelector("#do-logs-no-obj").onclick = function() {
+    includeObj = false;
+    doLogs();
+  };
+  document.querySelector("#do-logs").onclick = function() {
+    includeObj = true;
+    doLogs();
   }
 
   function a() { b() }
@@ -48,9 +60,13 @@
   function f() { g() }
   function g() { h() }
   function h() {
-    var foo = { bar: { baz: true }};
-    foo[i] = i;
-    console.log("Log number -> ", i, foo);
+    if (includeObj) {
+      var foo = { bar: { baz: true }};
+      foo[i] = i;
+      console.log("Log number -> ", i, foo);
+    } else {
+      console.log("Log number -> ", i);
+    }
   }
 
 
